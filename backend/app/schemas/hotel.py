@@ -9,6 +9,11 @@ class HotelBase(BaseModel):
 class HotelCreate(HotelBase):
     pass
 
+class HotelUpdate(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, description="Name of the hotel")
+    location: Optional[str] = Field(None, min_length=1, description="Location of the hotel")
+    is_active: Optional[bool] = None
+
 class Hotel(HotelBase):
     id: int
     class Config:
