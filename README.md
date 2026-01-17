@@ -10,6 +10,16 @@ A minimal internal hotel admin tool demonstrating domain modeling, backend API e
 - **Effective Rate Calculation**: Automatically calculates the final rate based on the latest applicable adjustment.
 - **Premium UI**: Glassmorphism design with responsive layout.
 
+## Documentation
+📚 **[Full Architecture Documentation](./docs/ARCHITECTURE.md)** - Comprehensive documentation including:
+- System architecture overview with diagrams
+- Entity-Relationship (ER) diagrams
+- API architecture and endpoints
+- Sequence diagrams for key workflows (authentication, hotel creation, rate calculations)
+- Security architecture
+- Design patterns and decisions
+- Technology stack details
+
 ## Tech Stack
 - **Backend**: FastAPI, SQLAlchemy (SQLite), Alembic, Pydantic, PyJWT.
 - **Frontend**: React, Vite, TypeScript, Vanilla CSS (Glassmorphism).
