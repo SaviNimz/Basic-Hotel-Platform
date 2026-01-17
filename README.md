@@ -126,7 +126,7 @@ Optionally you can run the application using Docker Compose:
 - Proper networking between containers
 
 ## Verification
-- **Backend tests**: Run `pytest` in the `backend` directory.
+- **Backend tests**: Run `pytest` in the `backend` directory to execute the comprehensive test suite covering authentication, API endpoints, services, and security.
 - **Frontend build**: Run `npm run build` in the `frontend` directory.
 
 ## Trade-offs
