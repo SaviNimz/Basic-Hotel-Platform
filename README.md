@@ -34,15 +34,26 @@ A minimal, senior-level internal hotel admin tool demonstrating clean domain mod
    ```bash
    alembic upgrade head
    ```
-4. Seed Admin User (username: `admin`, password: `password123`):
+4. Seed Admin User (Required for Login):
    ```bash
    python seed.py
    ```
+   **Credentials**:
+   - Username: `admin`
+   - Password: `password123`
+
 5. Run the server:
    ```bash
    uvicorn app.main:app --reload
    ```
    API will be available at `http://localhost:8000`. API Docs at `http://localhost:8000/docs`.
+
+   **Configuration**:
+   - The backend uses a `.env` file to configure CORS origins.
+   - Example `.env` is created automatically or you can create it manually:
+     ```env
+     BACKEND_CORS_ORIGINS=["http://localhost:5173", "http://localhost:3000"]
+     ```
 
 ### Frontend
 1. Navigate to `frontend`:
@@ -58,6 +69,13 @@ A minimal, senior-level internal hotel admin tool demonstrating clean domain mod
    npm run dev
    ```
    App will be available at `http://localhost:5173`.
+
+   **Configuration**:
+   - The frontend uses a `.env` file to configure the API URL.
+   - Example `.env`:
+     ```env
+     VITE_API_URL=http://localhost:8000
+     ```
 
 ## Verification
 - **Backend Tests**: Run `pytest` in the `backend` directory.
