@@ -6,15 +6,17 @@ from app.api import deps
 
 router = APIRouter()
 
-# Hotel CRUD 
+
 @router.post("/hotels/", response_model=schemas.Hotel)
 def create_hotel(hotel: schemas.HotelCreate, db: Session = Depends(deps.get_db), current_user: models.User = Depends(deps.get_current_user)):
     return services.hotel.create(db=db, obj_in=hotel)
+
 
 @router.get("/hotels/", response_model=List[schemas.Hotel])
 def read_hotels(skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_db), current_user: models.User = Depends(deps.get_current_user)):
     hotels = services.hotel.get_multi(db, skip=skip, limit=limit)
     return hotels
+
 
 @router.get("/hotels/{hotel_id}", response_model=schemas.Hotel)
 def read_hotel(hotel_id: int, db: Session = Depends(deps.get_db), current_user: models.User = Depends(deps.get_current_user)):
@@ -22,6 +24,7 @@ def read_hotel(hotel_id: int, db: Session = Depends(deps.get_db), current_user: 
     if db_hotel is None:
         raise HTTPException(status_code=404, detail="Hotel not found")
     return db_hotel
+
 
 @router.put("/hotels/{hotel_id}", response_model=schemas.Hotel)
 def update_hotel(
@@ -34,6 +37,7 @@ def update_hotel(
     if db_hotel is None:
         raise HTTPException(status_code=404, detail="Hotel not found")
     return services.hotel.update(db=db, db_obj=db_hotel, obj_in=hotel_in)
+
 
 @router.delete("/hotels/{hotel_id}", response_model=schemas.Hotel)
 def delete_hotel(

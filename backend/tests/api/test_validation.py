@@ -3,6 +3,7 @@ from pydantic import ValidationError
 from app.schemas.room import RoomTypeBase
 from app.schemas.hotel import HotelBase
 
+
 def test_room_validation():
     # Negative rate
     with pytest.raises(ValidationError):
@@ -19,6 +20,7 @@ def test_room_validation():
     # Valid
     room = RoomTypeBase(name="Valid", base_rate=100, hotel_id=1)
     assert room.base_rate == 100
+
 
 def test_hotel_validation():
     # Empty name

@@ -6,9 +6,11 @@ from app.api import deps
 
 router = APIRouter()
 
+
 @router.get("/me")
 async def read_users_me(current_user: models.User = Depends(deps.get_current_user)):
     return {"username": current_user.username, "id": current_user.id}
+
 
 @router.post("/", response_model=schemas.User)
 def create_user(
@@ -21,6 +23,7 @@ def create_user(
         raise HTTPException(status_code=400, detail="Username already registered")
     return services.user.create(db=db, obj_in=user_in)
 
+
 @router.get("/", response_model=List[schemas.User])
 def read_users(
     skip: int = 0,
@@ -29,6 +32,7 @@ def read_users(
     current_user: models.User = Depends(deps.get_current_user),
 ):
     return services.user.get_multi(db, skip=skip, limit=limit)
+
 
 @router.get("/{user_id}", response_model=schemas.User)
 def read_user(
@@ -40,6 +44,7 @@ def read_user(
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
 
 @router.put("/{user_id}", response_model=schemas.User)
 def update_user(
@@ -56,6 +61,7 @@ def update_user(
         if existing_user and existing_user.id != user_id:
             raise HTTPException(status_code=400, detail="Username already registered")
     return services.user.update(db=db, db_obj=db_user, obj_in=user_in)
+
 
 @router.delete("/{user_id}", response_model=schemas.User)
 def delete_user(
