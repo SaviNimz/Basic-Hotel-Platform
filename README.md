@@ -1,6 +1,6 @@
 # Basic Hotel Platform
 
-A minimal, senior-level internal hotel admin tool demonstrating clean domain modeling, backend fundamentals, and premium UI.
+A minimal internal hotel admin tool demonstrating clean domain modeling, pragmatic backend fundamentals, and a polished UI.
 
 ## Features
 - **Authentication**: JWT-based login with a seeded admin user.
@@ -16,25 +16,32 @@ A minimal, senior-level internal hotel admin tool demonstrating clean domain mod
 
 ## Setup & Running
 
+### Prerequisites
+- **Python** 3.10+ (backend)
+- **Node.js** 18+ and **npm** (frontend)
+
 ### Backend
 1. Navigate to `backend`:
    ```bash
    cd backend
    ```
-2. Create virtual environment and install dependencies:
+2. Create and activate a virtual environment:
    ```bash
    python -m venv venv
    # Windows
    venv\Scripts\activate
-   # Mac/Linux
+   # macOS/Linux
    source venv/bin/activate
+   ```
+3. Install dependencies:
+   ```bash
    pip install -r requirements.txt
    ```
-3. Initialize Database and Migrations (Already configured):
+4. Run database migrations:
    ```bash
    alembic upgrade head
    ```
-4. Seed Admin User (Required for Login):
+5. Seed the admin user (required for login):
    ```bash
    python seed.py
    ```
@@ -42,15 +49,15 @@ A minimal, senior-level internal hotel admin tool demonstrating clean domain mod
    - Username: `admin`
    - Password: `password123`
 
-5. Run the server:
+6. Start the API server:
    ```bash
    uvicorn app.main:app --reload
    ```
-   API will be available at `http://localhost:8000`. API Docs at `http://localhost:8000/docs`.
+   API will be available at `http://localhost:8000`. Docs at `http://localhost:8000/docs`.
 
    **Configuration**:
    - The backend uses a `.env` file to configure CORS origins.
-   - Example `.env` is created automatically or you can create it manually:
+   - Example `.env`:
      ```env
      BACKEND_CORS_ORIGINS=["http://localhost:5173", "http://localhost:3000"]
      ```
@@ -64,41 +71,38 @@ A minimal, senior-level internal hotel admin tool demonstrating clean domain mod
    ```bash
    npm install
    ```
-3. Run the development server:
+3. Create a `.env` file:
+   ```env
+   VITE_API_URL=http://localhost:8000
+   ```
+4. Start the development server:
    ```bash
    npm run dev
    ```
    App will be available at `http://localhost:5173`.
 
-   **Configuration**:
-   - The frontend uses a `.env` file to configure the API URL.
-   - Example `.env`:
-     ```env
-     VITE_API_URL=http://localhost:8000
-     ```
+### Optional: Docker Compose
+If you prefer, you can run the services via Docker Compose (from the repo root):
+```bash
+docker-compose up --build
+```
 
 ## Verification
-- **Backend Tests**: Run `pytest` in the `backend` directory.
-- **Frontend Build**: Run `npm run build` in the `frontend` directory.
+- **Backend tests**: Run `pytest` in the `backend` directory.
+- **Frontend build**: Run `npm run build` in the `frontend` directory.
 
-## Design Decisions & Trade-offs
+## Design Choices (Frontend)
+- **Component focus over framework complexity**: The UI is built with React + TypeScript and light composition. This keeps the view layer easy to navigate and avoids coupling to a large component library.
+- **Custom CSS with design tokens**: The glassmorphism theme uses CSS variables for color, spacing, and shadows, making the UI visually consistent and easy to iterate without introducing a styling dependency.
+- **Responsive layout by default**: Layouts are implemented with flexible grids and spacing to keep common admin workflows usable on smaller screens.
 
-### SQLite
-**Decision**: Used SQLite instead of PostgreSQL.
-**Reason**: Keeps the setup simple and self-contained for this assessment, avoiding the need for Docker or local Postgres installation. Demonstrates relational modeling equally well.
+## Design Choices (Backend)
+- **FastAPI + SQLAlchemy**: A small, predictable stack that supports typed request/response models and straightforward CRUD + domain logic.
+- **Alembic migrations**: Ensures schema changes are tracked and reproducible for local or CI environments.
+- **JWT auth with a seeded admin**: Keeps focus on domain workflows without the overhead of user management or identity providers for this scope.
 
-### Float for Currency
-**Decision**: Used `Float` for price fields (`base_rate`, `adjustment_amount`).
-**Reason**: While `Decimal` is standard for financial applications to avoid precision errors, `Float` was chosen for simplicity and ease of serialization with Pydantic/JSON for this specific scope.
-
-### Unique Hotel Name Constraint
-**Decision**: Added a Unique Constraint on `Hotel.name` as the second migration task.
-**Reason**: Ensures data integrity and fulfilled the assessment requirement to demonstrate a follow-up migration.
-
-### Minimal Authentication
-**Decision**: Implemented access token only (no refresh token), single seeded user.
-**Reason**: Focus is on the domain logic and admin functionality. A full auth system (registration, refresh, emailing) would be scope creep.
-
-### Frontend Styling
-**Decision**: Custom CSS with variables (Glassmorphism).
-**Reason**: To demonstrate "Rich Aesthetics" and CSS proficiency without relying on heavy UI libraries like MUI or Tailwind (unless requested), resulting in a unique, premium look.
+## Trade-offs
+- **SQLite for portability**: SQLite keeps setup lightweight and reproducible. The trade-off is limited concurrency and fewer production-grade features compared to Postgres.
+- **Float for currency**: Float is simple to serialize and sufficient for a demo. For production-grade billing, `Decimal` or a cents-based integer model would prevent rounding issues.
+- **Single-role authentication**: A seeded admin user accelerates evaluation and onboarding. A real deployment would require role-based access, password rotation, and refresh tokens.
+- **Minimal UI library usage**: Avoiding a heavy UI library reduces bundle size and keeps styles intentional. The trade-off is more manual styling work for complex components.
