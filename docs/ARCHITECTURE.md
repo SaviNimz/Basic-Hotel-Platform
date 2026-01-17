@@ -3,7 +3,6 @@
 ## Table of Contents
 1. [Overview](#overview)
 2. [System Architecture](#system-architecture)
-3. [Technology Stack](#technology-stack)
 4. [Domain Model](#domain-model)
 5. [Database Schema (ER Diagram)](#database-schema-er-diagram)
 6. [API Architecture](#api-architecture)
@@ -77,31 +76,6 @@ graph TB
 3. **Business Logic Layer**: Service classes implementing domain logic and business rules
 4. **Data Access Layer**: SQLAlchemy ORM for database abstraction
 5. **Data Layer**: SQLite database with Alembic-managed migrations
-
----
-
-## Technology Stack
-
-### Backend
-- **Framework**: FastAPI 0.104+
-- **ORM**: SQLAlchemy 2.0+
-- **Database**: SQLite (development/demo)
-- **Migration Tool**: Alembic
-- **Authentication**: PyJWT
-- **Validation**: Pydantic v2
-- **Password Hashing**: passlib with bcrypt
-
-### Frontend
-- **Framework**: React 18
-- **Build Tool**: Vite
-- **Language**: TypeScript
-- **Styling**: Vanilla CSS with CSS Variables (Glassmorphism theme)
-- **HTTP Client**: Axios
-- **Routing**: React Router v6
-
-### DevOps
-- **Containerization**: Docker & Docker Compose
-- **Testing**: pytest (backend)
 
 ---
 
