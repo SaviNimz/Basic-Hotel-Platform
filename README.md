@@ -17,6 +17,16 @@ A minimal internal hotel admin tool demonstrating domain modeling, backend API e
 - API architecture and endpoints
 - Sequence diagrams for key workflows (authentication, hotel creation, rate calculations)
 
+## Database Migrations with Alembic
+
+This project uses **Alembic** for version-controlled database migrations. Migration scripts in `backend/alembic/versions/` define incremental schema changes with `upgrade()` and `downgrade()` functions. Alembic can auto-generate migrations by comparing SQLAlchemy models to the current database state using `alembic revision --autogenerate -m "message"`, then apply them with `alembic upgrade head`.
+
+## Design Patterns & Best Practices
+
+**Backend**: Follows a clean architecture with Service Layer pattern for business logic (`app/services/`), Repository pattern via SQLAlchemy ORM, dependency injection for database sessions and authentication, Pydantic schemas for validation, and domain-driven design reflecting the business model.
+
+**Frontend**: Implements component-based architecture with reusable UI components, Context API for authentication state management, a service layer for API abstraction (`services/api.js`), CSS variables for consistent theming and React Router for protected routing.
+
 ## Setup & Running
 
 ### Prerequisites
