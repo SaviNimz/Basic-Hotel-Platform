@@ -35,7 +35,7 @@ class CRUDRateAdjustment(CRUDBase[RateAdjustment, RateAdjustmentCreate, RateAdju
     
     def get_by_room_type(self, db: Session, room_type_id: int) -> List[RateAdjustment]:
         """
-        Get all rate adjustments for a specific room type.e
+        Get all rate adjustments for a specific room type
         """
         return db.query(RateAdjustment).filter(RateAdjustment.room_type_id == room_type_id).all()
 
