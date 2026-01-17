@@ -1,19 +1,6 @@
 # Basic Hotel Platform - Architecture Documentation
 
 
-## Overview
-
-The Basic Hotel Platform is a full-stack hotel administration application designed to manage hotels, room types, and dynamic rate adjustments. The system follows a clean, layered architecture with clear separation between frontend, backend API, and data persistence layers.
-
-### Key Features
-- **JWT-based Authentication**: Secure login with token-based authentication
-- **Hotel Management**: CRUD operations for hotels
-- **Room Type Management**: Define and manage different room types per hotel
-- **Dynamic Rate Adjustments**: Apply date-specific rate modifications
-- **Effective Rate Calculation**: Automatic calculation of final rates based on base rates and adjustments
-
----
-
 ## Domain Model
 
 The system is built around four core domain entities:
