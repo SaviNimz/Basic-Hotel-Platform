@@ -21,10 +21,12 @@ export const createHotel = async (hotel: HotelCreate): Promise<Hotel> => {
     return response.data;
 };
 
+
 export const updateHotel = async (hotelId: number, hotel: HotelUpdate): Promise<Hotel> => {
     const response = await apiClient.put<Hotel>(`/hotels/${hotelId}`, hotel);
     return response.data;
 };
+
 
 export const deleteHotel = async (hotelId: number): Promise<Hotel> => {
     const response = await apiClient.delete<Hotel>(`/hotels/${hotelId}`);

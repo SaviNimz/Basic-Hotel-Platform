@@ -5,13 +5,16 @@ export interface HotelBase {
   is_active: boolean;
 }
 
+
 export interface HotelCreate extends HotelBase {}
+
 
 export interface HotelUpdate {
   name?: string;
   location?: string;
   is_active?: boolean;
 }
+
 
 export interface Hotel extends HotelBase {
   id: number;
@@ -24,13 +27,16 @@ export interface RoomTypeBase {
   hotel_id: number;
 }
 
+
 export interface RoomTypeCreate extends RoomTypeBase {}
+
 
 export interface RoomTypeUpdate {
   name?: string;
   base_rate?: number;
   hotel_id?: number;
 }
+
 
 export interface RoomType extends RoomTypeBase {
   id: number;
@@ -44,7 +50,9 @@ export interface RateAdjustmentBase {
   reason: string;
 }
 
+
 export interface RateAdjustmentCreate extends RateAdjustmentBase {}
+
 
 export interface RateAdjustment extends RateAdjustmentBase {
   id: number;
@@ -64,6 +72,7 @@ export interface UserLogin {
   username: string;
   password: string;
 }
+
 
 export interface Token {
   access_token: string;
