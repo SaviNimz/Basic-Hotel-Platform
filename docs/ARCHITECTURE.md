@@ -1,17 +1,5 @@
 # Basic Hotel Platform - Architecture Documentation
 
-## Table of Contents
-1. [Overview](#overview)
-2. [System Architecture](#system-architecture)
-4. [Domain Model](#domain-model)
-5. [Database Schema (ER Diagram)](#database-schema-er-diagram)
-6. [API Architecture](#api-architecture)
-7. [Frontend Architecture](#frontend-architecture)
-8. [Sequence Diagrams](#sequence-diagrams)
-9. [Security Architecture](#security-architecture)
-10. [Design Patterns](#design-patterns)
-
----
 
 ## Overview
 
@@ -23,59 +11,6 @@ The Basic Hotel Platform is a full-stack hotel administration application design
 - **Room Type Management**: Define and manage different room types per hotel
 - **Dynamic Rate Adjustments**: Apply date-specific rate modifications
 - **Effective Rate Calculation**: Automatic calculation of final rates based on base rates and adjustments
-
----
-
-## System Architecture
-
-```mermaid
-graph TB
-    subgraph "Client Layer"
-        UI[React Frontend<br/>Vite + TypeScript]
-    end
-    
-    subgraph "API Layer"
-        API[FastAPI Backend]
-        Auth[JWT Authentication]
-        Router[API Routers]
-    end
-    
-    subgraph "Business Logic Layer"
-        Services[Service Layer<br/>hotel_service, rate_service, user_service]
-    end
-    
-    subgraph "Data Access Layer"
-        ORM[SQLAlchemy ORM]
-        Models[Domain Models]
-    end
-    
-    subgraph "Data Layer"
-        DB[(SQLite Database)]
-        Migrations[Alembic Migrations]
-    end
-    
-    UI -->|HTTP/REST| API
-    API --> Auth
-    API --> Router
-    Router --> Services
-    Services --> ORM
-    ORM --> Models
-    Models --> DB
-    Migrations -.->|Schema Management| DB
-    
-    style UI fill:#e1f5ff
-    style API fill:#fff4e1
-    style Services fill:#f0e1ff
-    style DB fill:#e1ffe1
-```
-
-### Architecture Layers
-
-1. **Client Layer**: React-based SPA with TypeScript, providing a premium glassmorphism UI
-2. **API Layer**: FastAPI framework handling HTTP requests, routing, and authentication
-3. **Business Logic Layer**: Service classes implementing domain logic and business rules
-4. **Data Access Layer**: SQLAlchemy ORM for database abstraction
-5. **Data Layer**: SQLite database with Alembic-managed migrations
 
 ---
 
