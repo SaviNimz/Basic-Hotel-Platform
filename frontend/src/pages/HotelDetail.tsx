@@ -291,12 +291,14 @@ export const HotelDetail: React.FC = () => {
                 {/* Hotel Info */}
                 <Card className="hotel-info">
                     <h1 className="hotel-detail-title">{hotel.name}</h1>
-                    <p className="hotel-detail-location">{hotel.location}</p>
-                    {hotel.is_active ? (
-                        <span className="hotel-badge hotel-badge--active">Active</span>
-                    ) : (
-                        <span className="hotel-badge hotel-badge--inactive">Inactive</span>
-                    )}
+                    <div className="hotel-detail-meta">
+                        <p className="hotel-detail-location">{hotel.location}</p>
+                        {hotel.is_active ? (
+                            <span className="hotel-badge hotel-badge--active">Active</span>
+                        ) : (
+                            <span className="hotel-badge hotel-badge--inactive">Inactive</span>
+                        )}
+                    </div>
                 </Card>
 
                 {/* Room Types */}
@@ -315,7 +317,7 @@ export const HotelDetail: React.FC = () => {
                     ) : (
                         <div className="room-types-grid">
                             {roomTypes.map((roomType) => (
-                                <Card key={roomType.id}>
+                                <Card key={roomType.id} className="room-type-card-wrapper">
                                     <div className="room-type-card">
                                         <div className="room-type-card__content">
                                             <h3 className="room-type-card__name">{roomType.name}</h3>
