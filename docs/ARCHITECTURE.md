@@ -315,30 +315,3 @@ sequenceDiagram
     end
 ```
 
-## Configuration & Environment
-
-### Backend Configuration
-
-Configuration loaded from environment variables:
-
-```env
-# CORS Settings
-BACKEND_CORS_ORIGINS=["http://localhost:5173"]
-
-# JWT Settings
-SECRET_KEY=<secret-key>
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=30
-
-# Database
-DATABASE_URL=sqlite:///./hotel.db
-```
-
-### Frontend Configuration
-
-```env
-# API Base URL
-VITE_API_URL=http://localhost:8000
-```
-
-
