@@ -65,7 +65,7 @@ def client(test_db):
 
 @pytest.fixture(scope="module")
 def admin_token(client):
-    response = client.post("/token", data={"username": "admin", "password": "password123"})
+    response = client.post("/auth/token", data={"username": "admin", "password": "password123"})
     assert response.status_code == 200
     return response.json()["access_token"]
 

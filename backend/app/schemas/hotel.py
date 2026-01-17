@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 
 class HotelBase(BaseModel):
@@ -15,6 +15,6 @@ class HotelUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 class Hotel(HotelBase):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
-    class Config:
-        from_attributes = True

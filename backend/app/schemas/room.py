@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import date
 from typing import Optional
 
@@ -16,9 +16,9 @@ class RoomTypeUpdate(BaseModel):
     hotel_id: Optional[int] = None
 
 class RoomType(RoomTypeBase):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
-    class Config:
-        from_attributes = True
 
 class RateAdjustmentBase(BaseModel):
     room_type_id: int
@@ -36,6 +36,6 @@ class RateAdjustmentUpdate(BaseModel):
     reason: Optional[str] = None
 
 class RateAdjustment(RateAdjustmentBase):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
-    class Config:
-        from_attributes = True
