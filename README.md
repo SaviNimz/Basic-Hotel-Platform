@@ -93,9 +93,9 @@ This project uses **Alembic** for version-controlled database migrations. Migrat
    ```
    App will be available at `http://localhost:5173`.
 
-### Docker Compose (Recommended)
+### Docker Compose 
 
-The easiest way to run the entire platform is using Docker Compose:
+Optionally you can run the application using Docker Compose:
 
 1. **Prerequisites**: Docker and Docker Compose installed on your system
 
@@ -118,33 +118,12 @@ The easiest way to run the entire platform is using Docker Compose:
    - Username: `admin`
    - Password: `password123`
 
-5. **Stop services**:
-   ```bash
-   docker-compose down
-   ```
-
-6. **View logs**:
-   ```bash
-   # All services
-   docker-compose logs -f
-   
-   # Specific service
-   docker-compose logs -f backend
-   docker-compose logs -f frontend
-   ```
-
-7. **Rebuild after code changes**:
-   ```bash
-   docker-compose up --build -d
-   ```
-
 **Note**: The Docker setup includes:
 - Automatic database migrations on startup
 - Hot-reload for backend development
 - Health checks for all services
 - Persistent SQLite database volume
 - Proper networking between containers
-
 
 ## Verification
 - **Backend tests**: Run `pytest` in the `backend` directory.
