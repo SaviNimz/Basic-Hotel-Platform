@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getHotel, getRoomTypes } from '../api/hotels';
-import { createRateAdjustment } from '../api/rooms';
-import type { Hotel, RoomType, RateAdjustmentCreate } from '../api/types';
+import { createRateAdjustment, createRoomType, updateRoomType, getEffectiveRate } from '../api/rooms';
+import type {
+    Hotel,
+    RoomType,
+    RateAdjustmentCreate,
+    EffectiveRateResponse,
+} from '../api/types';
 import { MainLayout } from '../components/layout/MainLayout';
 import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
@@ -15,8 +20,17 @@ export const HotelDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [hotel, setHotel] = useState<Hotel | null>(null);
     const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
+    const [effectiveRates, setEffectiveRates] = useState<Record<number, EffectiveRateResponse>>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+
+    // Room type modal state
+    const [isRoomTypeModalOpen, setIsRoomTypeModalOpen] = useState(false);
+    const [editingRoomType, setEditingRoomType] = useState<RoomType | null>(null);
+    const [roomTypeName, setRoomTypeName] = useState('');
+    const [roomTypeRate, setRoomTypeRate] = useState('');
+    const [roomTypeError, setRoomTypeError] = useState('');
+    const [roomTypeSubmitting, setRoomTypeSubmitting] = useState(false);
 
     // Rate adjustment modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +52,22 @@ export const HotelDetail: React.FC = () => {
                 ]);
                 setHotel(hotelData);
                 setRoomTypes(roomTypesData);
+                const rateResponses = await Promise.all(
+                    roomTypesData.map(async (roomType) => {
+                        try {
+                            return await getEffectiveRate(roomType.id);
+                        } catch {
+                            return null;
+                        }
+                    })
+                );
+                const rateMap = rateResponses.reduce<Record<number, EffectiveRateResponse>>((acc, rate) => {
+                    if (rate) {
+                        acc[rate.room_type_id] = rate;
+                    }
+                    return acc;
+                }, {});
+                setEffectiveRates(rateMap);
             } catch (err: any) {
                 setError(err.response?.data?.detail || 'Failed to load hotel details');
             } finally {
@@ -47,6 +77,20 @@ export const HotelDetail: React.FC = () => {
 
         fetchData();
     }, [id]);
+
+    const openRoomTypeModal = (roomType?: RoomType) => {
+        setEditingRoomType(roomType || null);
+        setRoomTypeName(roomType?.name ?? '');
+        setRoomTypeRate(roomType ? roomType.base_rate.toString() : '');
+        setRoomTypeError('');
+        setIsRoomTypeModalOpen(true);
+    };
+
+    const closeRoomTypeModal = () => {
+        setIsRoomTypeModalOpen(false);
+        setEditingRoomType(null);
+        setRoomTypeError('');
+    };
 
     const openAdjustmentModal = (roomType: RoomType) => {
         setSelectedRoomType(roomType);
@@ -60,6 +104,66 @@ export const HotelDetail: React.FC = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedRoomType(null);
+    };
+
+    const fetchEffectiveRate = async (roomTypeId: number, date?: string) => {
+        try {
+            const rate = await getEffectiveRate(roomTypeId, date);
+            setEffectiveRates((prev) => ({ ...prev, [roomTypeId]: rate }));
+        } catch {
+            return;
+        }
+    };
+
+    const handleSubmitRoomType = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setRoomTypeError('');
+
+        if (!hotel) return;
+
+        const baseRate = parseFloat(roomTypeRate);
+        if (isNaN(baseRate) || baseRate <= 0) {
+            setRoomTypeError('Please enter a valid base rate greater than 0');
+            return;
+        }
+
+        setRoomTypeSubmitting(true);
+
+        try {
+            if (editingRoomType) {
+                const updatedRoomType = await updateRoomType(editingRoomType.id, {
+                    name: roomTypeName.trim(),
+                    base_rate: baseRate,
+                    hotel_id: hotel.id,
+                });
+                setRoomTypes((prev) =>
+                    prev.map((roomType) =>
+                        roomType.id === updatedRoomType.id ? updatedRoomType : roomType
+                    )
+                );
+                await fetchEffectiveRate(updatedRoomType.id);
+            } else {
+                const newRoomType = await createRoomType({
+                    name: roomTypeName.trim(),
+                    base_rate: baseRate,
+                    hotel_id: hotel.id,
+                });
+                setRoomTypes((prev) => [...prev, newRoomType]);
+                await fetchEffectiveRate(newRoomType.id);
+            }
+            closeRoomTypeModal();
+        } catch (err: any) {
+            const detail = err.response?.data?.detail;
+            if (typeof detail === 'string') {
+                setRoomTypeError(detail);
+            } else if (Array.isArray(detail)) {
+                setRoomTypeError(detail.map((e: any) => e.msg).join(', '));
+            } else {
+                setRoomTypeError('Failed to save room type');
+            }
+        } finally {
+            setRoomTypeSubmitting(false);
+        }
     };
 
     const handleSubmitAdjustment = async (e: React.FormEvent) => {
@@ -85,6 +189,8 @@ export const HotelDetail: React.FC = () => {
             };
 
             await createRateAdjustment(adjustment);
+
+            await fetchEffectiveRate(selectedRoomType.id, effectiveDate);
 
             // Success - close modal and show success (could add toast notification)
             closeModal();
@@ -135,7 +241,12 @@ export const HotelDetail: React.FC = () => {
 
                 {/* Room Types */}
                 <div className="room-types-section">
-                    <h2 className="section-title">Room Types</h2>
+                    <div className="room-types-header">
+                        <h2 className="section-title">Room Types</h2>
+                        <Button variant="primary" onClick={() => openRoomTypeModal()}>
+                            Add Room Type
+                        </Button>
+                    </div>
 
                     {roomTypes.length === 0 ? (
                         <Card>
@@ -154,8 +265,25 @@ export const HotelDetail: React.FC = () => {
                                                     ${roomType.base_rate.toFixed(2)}
                                                 </span>
                                             </div>
+                                            {effectiveRates[roomType.id] && (
+                                                <div className="room-type-card__rate room-type-card__rate--effective">
+                                                    <span className="room-type-card__rate-label">
+                                                        Effective Rate ({effectiveRates[roomType.id].date}):
+                                                    </span>
+                                                    <span className="room-type-card__rate-value">
+                                                        ${effectiveRates[roomType.id].effective_rate.toFixed(2)}
+                                                    </span>
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="room-type-card__actions">
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                                onClick={() => openRoomTypeModal(roomType)}
+                                            >
+                                                Edit
+                                            </Button>
                                             <Button
                                                 variant="primary"
                                                 size="sm"
@@ -217,6 +345,52 @@ export const HotelDetail: React.FC = () => {
                         </Button>
                         <Button type="submit" variant="primary" loading={submitting}>
                             Submit Adjustment
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
+
+            {/* Room Type Modal */}
+            <Modal
+                isOpen={isRoomTypeModalOpen}
+                onClose={closeRoomTypeModal}
+                title={editingRoomType ? 'Edit Room Type' : 'Add Room Type'}
+            >
+                <form onSubmit={handleSubmitRoomType} className="room-type-form">
+                    <Input
+                        label="Room Type Name"
+                        type="text"
+                        value={roomTypeName}
+                        onChange={(e) => setRoomTypeName(e.target.value)}
+                        placeholder="e.g., Deluxe Suite"
+                        required
+                        fullWidth
+                    />
+                    <Input
+                        label="Base Rate"
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        value={roomTypeRate}
+                        onChange={(e) => setRoomTypeRate(e.target.value)}
+                        placeholder="e.g., 150.00"
+                        required
+                        fullWidth
+                    />
+
+                    {roomTypeError && <div className="adjustment-error">{roomTypeError}</div>}
+
+                    <div className="adjustment-form-actions">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={closeRoomTypeModal}
+                            disabled={roomTypeSubmitting}
+                        >
+                            Cancel
+                        </Button>
+                        <Button type="submit" variant="primary" loading={roomTypeSubmitting}>
+                            {editingRoomType ? 'Save Changes' : 'Create Room Type'}
                         </Button>
                     </div>
                 </form>

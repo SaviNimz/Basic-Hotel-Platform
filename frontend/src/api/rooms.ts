@@ -2,6 +2,7 @@ import { apiClient } from './client';
 import type {
     RoomType,
     RoomTypeCreate,
+    RoomTypeUpdate,
     RateAdjustment,
     RateAdjustmentCreate,
     EffectiveRateResponse
@@ -10,6 +11,14 @@ import type {
 
 export const createRoomType = async (roomType: RoomTypeCreate): Promise<RoomType> => {
     const response = await apiClient.post<RoomType>('/room-types/', roomType);
+    return response.data;
+};
+
+export const updateRoomType = async (
+    roomTypeId: number,
+    roomType: RoomTypeUpdate
+): Promise<RoomType> => {
+    const response = await apiClient.put<RoomType>(`/room-types/${roomTypeId}`, roomType);
     return response.data;
 };
 
