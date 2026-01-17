@@ -1,9 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import date
 
 class RoomTypeBase(BaseModel):
-    name: str
-    base_rate: float
+    name: str = Field(..., min_length=1)
+    base_rate: float = Field(..., gt=0)
     hotel_id: int
 
 class RoomTypeCreate(RoomTypeBase):
