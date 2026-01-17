@@ -192,7 +192,7 @@ sequenceDiagram
     participant DB as Database
 
     User->>UI: Enter credentials
-    UI->>API: POST /api/v1/auth/token
+    UI->>API: POST /api/auth/token
     API->>DB: Query user by username
     DB-->>API: User record
     API->>Auth: Verify password hash
@@ -216,7 +216,7 @@ sequenceDiagram
     participant DB as Database
 
     User->>UI: Fill hotel form & submit
-    UI->>API: POST /api/v1/hotels/<br/>Header: Bearer {token}
+    UI->>API: POST /api/hotels/<br/>Header: Bearer {token}
     API->>API: Validate JWT token
     API->>API: Parse & validate request body
     API->>Service: hotel.create(obj_in)
@@ -244,7 +244,7 @@ sequenceDiagram
     API-->>UI: Hotel data with room types
     
     Admin->>UI: Create new room type
-    UI->>API: POST /api/v1/room-types/
+    UI->>API: POST /api/room-types/
     API->>RoomService: create(room_type_data)
     RoomService->>DB: INSERT INTO room_types
     DB-->>RoomService: RoomType record
@@ -272,7 +272,7 @@ sequenceDiagram
     participant DB as Database
 
     User->>UI: Select room type & date
-    UI->>API: GET /api/v1/effective-rate/<br/>?room_type_id={id}&date={date}
+    UI->>API: GET /api/effective-rate/<br/>?room_type_id={id}&date={date}
     API->>RateService: get_effective_rate(room_type_id, date)
     RateService->>DB: SELECT base_rate FROM room_types
     DB-->>RateService: base_rate
@@ -295,7 +295,7 @@ sequenceDiagram
     participant DB as Database
 
     Admin->>UI: Edit hotel details
-    UI->>API: PUT /api/v1/hotels/{id}<br/>Header: Bearer {token}
+    UI->>API: PUT /api/hotels/{id}<br/>Header: Bearer {token}
     API->>API: Validate JWT token
     API->>Service: hotel.get(id)
     Service->>DB: SELECT * FROM hotels WHERE id={id}
