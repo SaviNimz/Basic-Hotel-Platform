@@ -12,7 +12,6 @@ A minimal internal hotel admin tool demonstrating domain modeling, backend API e
 
 ## Documentation
 **[Full Architecture Documentation](./docs/ARCHITECTURE.md)** - Comprehensive documentation including:
-- System architecture overview with diagrams
 - Entity-Relationship (ER) diagrams
 - API architecture and endpoints
 - Sequence diagrams for key workflows (authentication, hotel creation, rate calculations)
