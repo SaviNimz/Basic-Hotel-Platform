@@ -94,11 +94,6 @@ erDiagram
 - **hotels ↔ room_types**: One-to-Many (A hotel can have multiple room types)
 - **room_types ↔ rate_adjustments**: One-to-Many (A room type can have multiple rate adjustments over time)
 
-### Indexes
-- `users.username`: Unique index for fast user lookup
-- `hotels.name`: Unique index for hotel identification
-- Primary keys on all tables
-
 ---
 
 ## API Architecture
