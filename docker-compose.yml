@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: hotel_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - SECRET_KEY=changethis
+      # SQLite fallback if not using Postgres
+      - DATABASE_URL=sqlite:///./hotel.db
