@@ -136,7 +136,7 @@ export const HotelList: React.FC = () => {
                 <div className="hotel-list-header">
                     <div className="hotel-list-header__content">
                         <div>
-                            <h1 className="hotel-list-title">Hotels</h1>
+                            <h1 className="hotel-list-title">Welcome Admin!</h1>
                             <p className="hotel-list-subtitle">Manage your hotel properties</p>
                         </div>
                         <Button variant="primary" onClick={openCreateModal}>
