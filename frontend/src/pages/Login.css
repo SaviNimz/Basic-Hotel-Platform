@@ -1,0 +1,50 @@
+/* ========================================
+   LOGIN PAGE STYLES
+   ======================================== */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-accent-50) 100%);
+    padding: var(--spacing-6);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: var(--spacing-8);
+}
+
+.login-title {
+    margin: 0 0 var(--spacing-2) 0;
+    font-size: var(--text-3xl);
+    color: var(--color-text-heading);
+}
+
+.login-subtitle {
+    margin: 0;
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.login-error {
+    padding: var(--spacing-3) var(--spacing-4);
+    background-color: #fef2f2;
+    border: var(--border-width) solid var(--color-error);
+    border-radius: var(--border-radius-md);
+    color: var(--color-error);
+    font-size: var(--text-sm);
+    text-align: center;
+}

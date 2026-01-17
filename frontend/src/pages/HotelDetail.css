@@ -1,0 +1,163 @@
+/* ========================================
+   HOTEL DETAIL PAGE STYLES
+   ======================================== */
+
+.hotel-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+}
+
+/* ========== HOTEL INFO ========== */
+
+.hotel-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.hotel-detail-title {
+    margin: 0;
+    font-size: var(--text-4xl);
+    color: var(--color-text-heading);
+}
+
+.hotel-detail-location {
+    margin: 0;
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.hotel-detail-location::before {
+    content: '📍';
+    font-size: var(--text-xl);
+}
+
+.hotel-badge {
+    display: inline-block;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--border-radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+}
+
+.hotel-badge--active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.hotel-badge--inactive {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* ========== ROOM TYPES SECTION ========== */
+
+.room-types-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.section-title {
+    margin: 0;
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-heading);
+}
+
+.room-types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-5);
+}
+
+.room-type-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.room-type-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.room-type-card__name {
+    margin: 0;
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-heading);
+}
+
+.room-type-card__rate {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-2);
+}
+
+.room-type-card__rate-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.room-type-card__rate-value {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent-600);
+}
+
+.room-type-card__actions {
+    padding-top: var(--spacing-3);
+    border-top: var(--border-width) solid var(--color-border);
+}
+
+/* ========== ADJUSTMENT FORM ========== */
+
+.adjustment-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.adjustment-error {
+    padding: var(--spacing-3) var(--spacing-4);
+    background-color: #fef2f2;
+    border: var(--border-width) solid var(--color-error);
+    border-radius: var(--border-radius-md);
+    color: var(--color-error);
+    font-size: var(--text-sm);
+}
+
+.adjustment-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+    padding-top: var(--spacing-4);
+    border-top: var(--border-width) solid var(--color-border);
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: var(--text-base);
+    padding: var(--spacing-6);
+}
+
+.error-message {
+    padding: var(--spacing-6);
+    background-color: #fef2f2;
+    border: var(--border-width) solid var(--color-error);
+    border-radius: var(--border-radius-lg);
+    color: var(--color-error);
+    text-align: center;
+}

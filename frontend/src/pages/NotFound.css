@@ -1,0 +1,41 @@
+/* ========================================
+   NOT FOUND PAGE STYLES
+   ======================================== */
+
+.not-found-container {
+    max-width: 600px;
+    margin: var(--spacing-16) auto;
+}
+
+.not-found-content {
+    text-align: center;
+    padding: var(--spacing-10);
+}
+
+.not-found-title {
+    margin: 0 0 var(--spacing-4) 0;
+    font-size: 6rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent-600);
+}
+
+.not-found-text {
+    margin: 0 0 var(--spacing-6) 0;
+    font-size: var(--text-xl);
+    color: var(--color-text-secondary);
+}
+
+.not-found-link {
+    display: inline-block;
+    padding: var(--spacing-3) var(--spacing-6);
+    background-color: var(--color-accent-600);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    font-weight: var(--font-weight-medium);
+    transition: background-color var(--transition-fast);
+}
+
+.not-found-link:hover {
+    background-color: var(--color-accent-700);
+}

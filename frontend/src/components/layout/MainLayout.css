@@ -1,0 +1,15 @@
+/* ========================================
+   MAIN LAYOUT STYLES
+   ======================================== */
+
+.main-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg-secondary);
+}
+
+.main-layout__content {
+    flex: 1;
+    padding: var(--spacing-8) var(--spacing-6);
+}
