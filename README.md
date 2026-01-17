@@ -94,16 +94,6 @@ docker-compose up --build
 - **Backend tests**: Run `pytest` in the `backend` directory.
 - **Frontend build**: Run `npm run build` in the `frontend` directory.
 
-## Design Choices (Frontend)
-- **Component focus over framework complexity**: The UI is built with React + TypeScript and light composition. This keeps the view layer easy to navigate and avoids coupling to a large component library.
-- **Custom CSS with design tokens**: The glassmorphism theme uses CSS variables for color, spacing, and shadows, making the UI visually consistent and easy to iterate without introducing a styling dependency.
-- **Responsive layout by default**: Layouts are implemented with flexible grids and spacing to keep common admin workflows usable on smaller screens.
-
-## Design Choices (Backend)
-- **FastAPI + SQLAlchemy**: A small, predictable stack that supports typed request/response models and straightforward CRUD + domain logic.
-- **Alembic migrations**: Ensures schema changes are tracked and reproducible for local or CI environments.
-- **JWT auth with a seeded admin**: Keeps focus on domain workflows without the overhead of user management or identity providers for this scope.
-
 ## Trade-offs
 - **SQLite for portability**: SQLite keeps setup lightweight and reproducible. The trade-off is limited concurrency and fewer production-grade features compared to Postgres.
 - **Float for currency**: Float is simple to serialize and sufficient for a demo. For production-grade billing, `Decimal` or a cents-based integer model would prevent rounding issues.
