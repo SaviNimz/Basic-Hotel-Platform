@@ -17,10 +17,6 @@ A minimal internal hotel admin tool demonstrating domain modeling, backend API e
 - API architecture and endpoints
 - Sequence diagrams for key workflows (authentication, hotel creation, rate calculations)
 
-## Tech Stack
-- **Backend**: FastAPI, SQLAlchemy (SQLite), Alembic, Pydantic, PyJWT.
-- **Frontend**: React, Vite, TypeScript, Vanilla CSS (Glassmorphism).
-
 ## Setup & Running
 
 ### Prerequisites
