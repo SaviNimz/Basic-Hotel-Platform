@@ -55,8 +55,8 @@ export interface EffectiveRateResponse {
   room_type_id: number;
   base_rate: number;
   effective_rate: number;
-  adjustments_applied: number;
-  date: string;
+  adjustment_applied: number;
+  effective_date: string;
 }
 
 // Auth Types

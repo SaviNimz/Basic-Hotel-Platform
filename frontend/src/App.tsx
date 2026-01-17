@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './pages/Login';
 import { HotelList } from './pages/HotelList';
 import { HotelDetail } from './pages/HotelDetail';
+import { RateAdjustments } from './pages/RateAdjustments';
 import { NotFound } from './pages/NotFound';
 
 // Protected Route wrapper
@@ -57,6 +58,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <HotelDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rate-adjustments"
+            element={
+              <ProtectedRoute>
+                <RateAdjustments />
               </ProtectedRoute>
             }
           />

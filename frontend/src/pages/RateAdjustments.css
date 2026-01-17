@@ -1,0 +1,95 @@
+.rate-adjustments-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+}
+
+.rate-adjustments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rate-adjustments-title {
+    margin: 0;
+    font-size: var(--text-3xl);
+}
+
+.rate-adjustments-subtitle {
+    margin-top: var(--spacing-2);
+    color: var(--color-gray-600);
+}
+
+.rate-adjustments-error {
+    color: var(--color-error-600);
+    font-weight: var(--font-weight-medium);
+}
+
+.rate-adjustments-grid {
+    display: grid;
+    gap: var(--spacing-6);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.rate-adjustments-section-title {
+    margin: 0 0 var(--spacing-4);
+    font-size: var(--text-lg);
+}
+
+.rate-adjustments-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.rate-adjustments-label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-gray-700);
+}
+
+.rate-adjustments-select {
+    padding: var(--spacing-3);
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid var(--color-border);
+    background: var(--color-white);
+    font-size: var(--text-base);
+}
+
+.rate-adjustments-empty {
+    color: var(--color-gray-600);
+}
+
+.rate-adjustments-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.rate-adjustments-list__item {
+    padding: var(--spacing-4);
+    border-radius: var(--radius-lg);
+    background: var(--color-white);
+    border: var(--border-width) solid var(--color-border);
+}
+
+.rate-adjustments-list__row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-2);
+}
+
+.rate-adjustments-list__amount {
+    color: var(--color-primary-700);
+}
+
+.rate-adjustments-list__reason {
+    margin: 0;
+    color: var(--color-gray-600);
+}
