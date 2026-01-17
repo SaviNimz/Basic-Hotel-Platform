@@ -7,6 +7,8 @@ import { Card } from '../components/common/Card';
 import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
 import { Loader } from '../components/common/Loader';
+import { extractErrorMessage } from '../utils/errorHandlers';
+import { parseFloatValue } from '../utils/validators';
 import './RateAdjustments.css';
 
 export const RateAdjustments: React.FC = () => {
@@ -45,7 +47,7 @@ export const RateAdjustments: React.FC = () => {
                     setSelectedHotelId(data[0].id);
                 }
             } catch (err: any) {
-                setError(err.response?.data?.detail || 'Failed to load hotels');
+                setError(extractErrorMessage(err, 'Failed to load hotels'));
             } finally {
                 setLoadingHotels(false);
             }
@@ -68,7 +70,7 @@ export const RateAdjustments: React.FC = () => {
                 setRoomTypes(data);
                 setSelectedRoomTypeId(data[0]?.id ?? null);
             } catch (err: any) {
-                setError(err.response?.data?.detail || 'Failed to load room types');
+                setError(extractErrorMessage(err, 'Failed to load room types'));
             } finally {
                 setLoadingRoomTypes(false);
             }
@@ -90,7 +92,7 @@ export const RateAdjustments: React.FC = () => {
                 const data = await getRateAdjustmentsByRoomType(selectedRoomTypeId);
                 setAdjustments(data);
             } catch (err: any) {
-                setError(err.response?.data?.detail || 'Failed to load rate adjustments');
+                setError(extractErrorMessage(err, 'Failed to load rate adjustments'));
             } finally {
                 setLoadingAdjustments(false);
             }
@@ -108,9 +110,9 @@ export const RateAdjustments: React.FC = () => {
             return;
         }
 
-        const parsedAmount = parseFloat(amount);
-        if (Number.isNaN(parsedAmount)) {
-            setFormError('Enter a valid adjustment amount.');
+        const validation = parseFloatValue(amount, 'adjustment amount');
+        if (validation.error) {
+            setFormError(validation.error);
             return;
         }
 
@@ -118,7 +120,7 @@ export const RateAdjustments: React.FC = () => {
         try {
             await createRateAdjustment({
                 room_type_id: selectedRoomType.id,
-                adjustment_amount: parsedAmount,
+                adjustment_amount: validation.value!,
                 effective_date: effectiveDate,
                 reason: reason.trim(),
             });
@@ -128,14 +130,7 @@ export const RateAdjustments: React.FC = () => {
             setEffectiveDate('');
             setReason('');
         } catch (err: any) {
-            const detail = err.response?.data?.detail;
-            if (typeof detail === 'string') {
-                setFormError(detail);
-            } else if (Array.isArray(detail)) {
-                setFormError(detail.map((item: any) => item.msg).join(', '));
-            } else {
-                setFormError('Failed to create rate adjustment');
-            }
+            setFormError(extractErrorMessage(err, 'Failed to create rate adjustment'));
         } finally {
             setSubmitting(false);
         }

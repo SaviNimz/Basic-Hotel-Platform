@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { Input } from '../components/common/Input';
 import { Button } from '../components/common/Button';
 import { Card } from '../components/common/Card';
+import { extractErrorMessage } from '../utils/errorHandlers';
 import './Login.css';
 
 export const Login: React.FC = () => {
@@ -26,7 +27,7 @@ export const Login: React.FC = () => {
             await login({ username, password });
             navigate('/hotels');
         } catch (err: any) {
-            setError(err.response?.data?.detail || 'Login failed. Please check your credentials.');
+            setError(extractErrorMessage(err, 'Login failed. Please check your credentials.'));
         } finally {
             setLoading(false);
         }

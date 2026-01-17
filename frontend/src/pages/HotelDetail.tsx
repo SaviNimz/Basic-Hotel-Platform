@@ -23,6 +23,8 @@ import { Loader } from '../components/common/Loader';
 import { Modal } from '../components/common/Modal';
 import { Input } from '../components/common/Input';
 import { RateAdjustmentHistoryModal } from '../components/rooms/RateAdjustmentHistoryModal';
+import { extractErrorMessage } from '../utils/errorHandlers';
+import { parseFloatValue, parsePositiveFloat } from '../utils/validators';
 import './HotelDetail.css';
 
 export const HotelDetail: React.FC = () => {
@@ -86,7 +88,7 @@ export const HotelDetail: React.FC = () => {
                 }, {});
                 setEffectiveRates(rateMap);
             } catch (err: any) {
-                setError(err.response?.data?.detail || 'Failed to load hotel details');
+                setError(extractErrorMessage(err, 'Failed to load hotel details'));
             } finally {
                 setLoading(false);
             }
@@ -153,7 +155,7 @@ export const HotelDetail: React.FC = () => {
         try {
             await fetchRateAdjustments(roomType.id);
         } catch (err: any) {
-            setHistoryError(err.response?.data?.detail || 'Failed to load rate history');
+            setHistoryError(extractErrorMessage(err, 'Failed to load rate history'));
         } finally {
             setHistoryLoading(false);
         }
@@ -168,7 +170,7 @@ export const HotelDetail: React.FC = () => {
             await deleteRoomType(roomType.id);
             setRoomTypes((prev) => prev.filter((item) => item.id !== roomType.id));
         } catch (err: any) {
-            setError(err.response?.data?.detail || 'Failed to delete room type');
+            setError(extractErrorMessage(err, 'Failed to delete room type'));
         } finally {
             setDeletingRoomTypeId(null);
         }
@@ -180,9 +182,9 @@ export const HotelDetail: React.FC = () => {
 
         if (!hotel) return;
 
-        const baseRate = parseFloat(roomTypeRate);
-        if (isNaN(baseRate) || baseRate <= 0) {
-            setRoomTypeError('Please enter a valid base rate greater than 0');
+        const validation = parsePositiveFloat(roomTypeRate, 'base rate');
+        if (validation.error) {
+            setRoomTypeError(validation.error);
             return;
         }
 
@@ -192,7 +194,7 @@ export const HotelDetail: React.FC = () => {
             if (editingRoomType) {
                 const updatedRoomType = await updateRoomType(editingRoomType.id, {
                     name: roomTypeName.trim(),
-                    base_rate: baseRate,
+                    base_rate: validation.value!,
                     hotel_id: hotel.id,
                 });
                 setRoomTypes((prev) =>
@@ -204,7 +206,7 @@ export const HotelDetail: React.FC = () => {
             } else {
                 const newRoomType = await createRoomType({
                     name: roomTypeName.trim(),
-                    base_rate: baseRate,
+                    base_rate: validation.value!,
                     hotel_id: hotel.id,
                 });
                 setRoomTypes((prev) => [...prev, newRoomType]);
@@ -212,14 +214,7 @@ export const HotelDetail: React.FC = () => {
             }
             closeRoomTypeModal();
         } catch (err: any) {
-            const detail = err.response?.data?.detail;
-            if (typeof detail === 'string') {
-                setRoomTypeError(detail);
-            } else if (Array.isArray(detail)) {
-                setRoomTypeError(detail.map((e: any) => e.msg).join(', '));
-            } else {
-                setRoomTypeError('Failed to save room type');
-            }
+            setRoomTypeError(extractErrorMessage(err, 'Failed to save room type'));
         } finally {
             setRoomTypeSubmitting(false);
         }
@@ -231,9 +226,9 @@ export const HotelDetail: React.FC = () => {
 
         if (!selectedRoomType) return;
 
-        const amount = parseFloat(adjustmentAmount);
-        if (isNaN(amount)) {
-            setAdjustmentError('Please enter a valid adjustment amount');
+        const validation = parseFloatValue(adjustmentAmount, 'adjustment amount');
+        if (validation.error) {
+            setAdjustmentError(validation.error);
             return;
         }
 
@@ -242,7 +237,7 @@ export const HotelDetail: React.FC = () => {
         try {
             const adjustment: RateAdjustmentCreate = {
                 room_type_id: selectedRoomType.id,
-                adjustment_amount: amount,
+                adjustment_amount: validation.value!,
                 effective_date: effectiveDate,
                 reason: reason.trim(),
             };
@@ -256,14 +251,7 @@ export const HotelDetail: React.FC = () => {
             closeModal();
             alert('Rate adjustment created successfully!');
         } catch (err: any) {
-            const detail = err.response?.data?.detail;
-            if (typeof detail === 'string') {
-                setAdjustmentError(detail);
-            } else if (Array.isArray(detail)) {
-                setAdjustmentError(detail.map((e: any) => e.msg).join(', '));
-            } else {
-                setAdjustmentError('Failed to create rate adjustment');
-            }
+            setAdjustmentError(extractErrorMessage(err, 'Failed to create rate adjustment'));
         } finally {
             setSubmitting(false);
         }

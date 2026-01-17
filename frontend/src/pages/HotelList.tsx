@@ -8,6 +8,7 @@ import { Button } from '../components/common/Button';
 import { Loader } from '../components/common/Loader';
 import { Modal } from '../components/common/Modal';
 import { Input } from '../components/common/Input';
+import { extractErrorMessage } from '../utils/errorHandlers';
 import './HotelList.css';
 
 export const HotelList: React.FC = () => {
@@ -32,7 +33,7 @@ export const HotelList: React.FC = () => {
                 const data = await getHotels();
                 setHotels(data);
             } catch (err: any) {
-                setError(err.response?.data?.detail || 'Failed to load hotels');
+                setError(extractErrorMessage(err, 'Failed to load hotels'));
             } finally {
                 setLoading(false);
             }
@@ -90,14 +91,7 @@ export const HotelList: React.FC = () => {
             }
             closeModal();
         } catch (err: any) {
-            const detail = err.response?.data?.detail;
-            if (typeof detail === 'string') {
-                setFormError(detail);
-            } else if (Array.isArray(detail)) {
-                setFormError(detail.map((e: any) => e.msg).join(', '));
-            } else {
-                setFormError('Failed to save hotel');
-            }
+            setFormError(extractErrorMessage(err, 'Failed to save hotel'));
         } finally {
             setSubmitting(false);
         }
@@ -114,12 +108,7 @@ export const HotelList: React.FC = () => {
             await deleteHotel(hotel.id);
             setHotels((prev) => prev.filter((item) => item.id !== hotel.id));
         } catch (err: any) {
-            const detail = err.response?.data?.detail;
-            if (typeof detail === 'string') {
-                setActionError(detail);
-            } else {
-                setActionError('Failed to delete hotel');
-            }
+            setActionError(extractErrorMessage(err, 'Failed to delete hotel'));
         } finally {
             setDeletingId(null);
         }
