@@ -37,3 +37,28 @@
     align-items: center;
     gap: var(--spacing-4);
 }
+
+.navbar__links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.navbar__link {
+    text-decoration: none;
+    color: var(--color-gray-700);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-md);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar__link:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-primary-700);
+}
+
+.navbar__link--active {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-700);
+}

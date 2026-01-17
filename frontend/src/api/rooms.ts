@@ -22,11 +22,24 @@ export const updateRoomType = async (
     return response.data;
 };
 
+export const deleteRoomType = async (roomTypeId: number): Promise<RoomType> => {
+    const response = await apiClient.delete<RoomType>(`/room-types/${roomTypeId}`);
+    return response.data;
+};
 
 export const createRateAdjustment = async (
     adjustment: RateAdjustmentCreate
 ): Promise<RateAdjustment> => {
     const response = await apiClient.post<RateAdjustment>('/rate-adjustments/', adjustment);
+    return response.data;
+};
+
+export const getRateAdjustmentsByRoomType = async (
+    roomTypeId: number
+): Promise<RateAdjustment[]> => {
+    const response = await apiClient.get<RateAdjustment[]>(
+        `/room-types/${roomTypeId}/rate-adjustments/`
+    );
     return response.data;
 };
 

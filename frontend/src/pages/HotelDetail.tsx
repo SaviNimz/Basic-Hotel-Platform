@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getHotel, getRoomTypes } from '../api/hotels';
-import { createRateAdjustment, createRoomType, updateRoomType, getEffectiveRate } from '../api/rooms';
+import {
+    createRateAdjustment,
+    createRoomType,
+    updateRoomType,
+    deleteRoomType,
+    getEffectiveRate,
+    getRateAdjustmentsByRoomType,
+} from '../api/rooms';
 import type {
     Hotel,
     RoomType,
     RateAdjustmentCreate,
     EffectiveRateResponse,
+    RateAdjustment,
 } from '../api/types';
 import { MainLayout } from '../components/layout/MainLayout';
 import { Card } from '../components/common/Card';
@@ -14,6 +22,7 @@ import { Button } from '../components/common/Button';
 import { Loader } from '../components/common/Loader';
 import { Modal } from '../components/common/Modal';
 import { Input } from '../components/common/Input';
+import { RateAdjustmentHistoryModal } from '../components/rooms/RateAdjustmentHistoryModal';
 import './HotelDetail.css';
 
 export const HotelDetail: React.FC = () => {
@@ -21,8 +30,10 @@ export const HotelDetail: React.FC = () => {
     const [hotel, setHotel] = useState<Hotel | null>(null);
     const [roomTypes, setRoomTypes] = useState<RoomType[]>([]);
     const [effectiveRates, setEffectiveRates] = useState<Record<number, EffectiveRateResponse>>({});
+    const [rateAdjustments, setRateAdjustments] = useState<Record<number, RateAdjustment[]>>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [deletingRoomTypeId, setDeletingRoomTypeId] = useState<number | null>(null);
 
     // Room type modal state
     const [isRoomTypeModalOpen, setIsRoomTypeModalOpen] = useState(false);
@@ -40,6 +51,12 @@ export const HotelDetail: React.FC = () => {
     const [reason, setReason] = useState('');
     const [adjustmentError, setAdjustmentError] = useState('');
     const [submitting, setSubmitting] = useState(false);
+
+    // Rate adjustment history modal
+    const [historyRoomType, setHistoryRoomType] = useState<RoomType | null>(null);
+    const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+    const [historyLoading, setHistoryLoading] = useState(false);
+    const [historyError, setHistoryError] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -106,12 +123,54 @@ export const HotelDetail: React.FC = () => {
         setSelectedRoomType(null);
     };
 
+    const closeHistoryModal = () => {
+        setIsHistoryModalOpen(false);
+        setHistoryRoomType(null);
+        setHistoryError('');
+    };
+
     const fetchEffectiveRate = async (roomTypeId: number, date?: string) => {
         try {
             const rate = await getEffectiveRate(roomTypeId, date);
             setEffectiveRates((prev) => ({ ...prev, [roomTypeId]: rate }));
         } catch {
             return;
+        }
+    };
+
+    const fetchRateAdjustments = async (roomTypeId: number) => {
+        const adjustments = await getRateAdjustmentsByRoomType(roomTypeId);
+        setRateAdjustments((prev) => ({ ...prev, [roomTypeId]: adjustments }));
+        return adjustments;
+    };
+
+    const openHistoryModal = async (roomType: RoomType) => {
+        setHistoryRoomType(roomType);
+        setIsHistoryModalOpen(true);
+        setHistoryLoading(true);
+        setHistoryError('');
+
+        try {
+            await fetchRateAdjustments(roomType.id);
+        } catch (err: any) {
+            setHistoryError(err.response?.data?.detail || 'Failed to load rate history');
+        } finally {
+            setHistoryLoading(false);
+        }
+    };
+
+    const handleDeleteRoomType = async (roomType: RoomType) => {
+        if (!window.confirm(`Delete ${roomType.name}? This cannot be undone.`)) {
+            return;
+        }
+        setDeletingRoomTypeId(roomType.id);
+        try {
+            await deleteRoomType(roomType.id);
+            setRoomTypes((prev) => prev.filter((item) => item.id !== roomType.id));
+        } catch (err: any) {
+            setError(err.response?.data?.detail || 'Failed to delete room type');
+        } finally {
+            setDeletingRoomTypeId(null);
         }
     };
 
@@ -191,6 +250,7 @@ export const HotelDetail: React.FC = () => {
             await createRateAdjustment(adjustment);
 
             await fetchEffectiveRate(selectedRoomType.id, effectiveDate);
+            await fetchRateAdjustments(selectedRoomType.id);
 
             // Success - close modal and show success (could add toast notification)
             closeModal();
@@ -268,7 +328,7 @@ export const HotelDetail: React.FC = () => {
                                             {effectiveRates[roomType.id] && (
                                                 <div className="room-type-card__rate room-type-card__rate--effective">
                                                     <span className="room-type-card__rate-label">
-                                                        Effective Rate ({effectiveRates[roomType.id].date}):
+                                                        Effective Rate ({effectiveRates[roomType.id].effective_date}):
                                                     </span>
                                                     <span className="room-type-card__rate-value">
                                                         ${effectiveRates[roomType.id].effective_rate.toFixed(2)}
@@ -283,6 +343,21 @@ export const HotelDetail: React.FC = () => {
                                                 onClick={() => openRoomTypeModal(roomType)}
                                             >
                                                 Edit
+                                            </Button>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => handleDeleteRoomType(roomType)}
+                                                disabled={deletingRoomTypeId === roomType.id}
+                                            >
+                                                {deletingRoomTypeId === roomType.id ? 'Deleting...' : 'Delete'}
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => openHistoryModal(roomType)}
+                                            >
+                                                History
                                             </Button>
                                             <Button
                                                 variant="primary"
@@ -349,6 +424,17 @@ export const HotelDetail: React.FC = () => {
                     </div>
                 </form>
             </Modal>
+
+            <RateAdjustmentHistoryModal
+                isOpen={isHistoryModalOpen}
+                roomType={historyRoomType}
+                adjustments={
+                    historyRoomType ? rateAdjustments[historyRoomType.id] ?? [] : []
+                }
+                loading={historyLoading}
+                error={historyError}
+                onClose={closeHistoryModal}
+            />
 
             {/* Room Type Modal */}
             <Modal
