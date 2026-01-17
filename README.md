@@ -8,7 +8,7 @@ A minimal internal hotel admin tool demonstrating domain modeling, backend API e
 - **Room Types & Rates**: Manage room types with base rates.
 - **Rate Adjustments**: Apply date-specific rate adjustments.
 - **Effective Rate Calculation**: Automatically calculates the final rate based on the latest applicable adjustment.
-- **Premium UI**: Glassmorphism design with responsive layout.
+- **Minimal UI**: MInimal design with responsive layout.
 
 ## Documentation
 **[Full Architecture Documentation](./docs/ARCHITECTURE.md)** - Comprehensive documentation including:
