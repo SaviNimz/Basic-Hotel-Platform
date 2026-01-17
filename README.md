@@ -8,7 +8,7 @@ A minimal internal hotel admin tool demonstrating domain modeling, backend API e
 - **Room Types & Rates**: Manage room types with base rates.
 - **Rate Adjustments**: Apply date-specific rate adjustments.
 - **Effective Rate Calculation**: Automatically calculates the final rate based on the latest applicable adjustment.
-- **Premium UI**: Glassmorphism design with responsive layout.
+- **Minimal UI**: MInimal design with responsive layout.
 
 ## Documentation
 **[Full Architecture Documentation](./docs/ARCHITECTURE.md)** - Comprehensive documentation including:
@@ -93,14 +93,40 @@ This project uses **Alembic** for version-controlled database migrations. Migrat
    ```
    App will be available at `http://localhost:5173`.
 
-### Optional: Docker Compose
-If you prefer, you can run the services via Docker Compose (from the repo root):
-```bash
-docker-compose up --build
-```
+### Docker Compose 
+
+Optionally you can run the application using Docker Compose:
+
+1. **Prerequisites**: Docker and Docker Compose installed on your system
+
+2. **Build and start services**:
+   ```bash
+   docker-compose up --build
+   ```
+   This will:
+   - Build both backend and frontend Docker images
+   - Run database migrations automatically
+   - Seed the admin user
+   - Start both services with health checks
+
+3. **Access the application**:
+   - **Frontend UI**: `http://localhost:5173`
+   - **Backend API**: `http://localhost:8000`
+   - **API Documentation**: `http://localhost:8000/docs`
+
+4. **Default credentials**:
+   - Username: `admin`
+   - Password: `password123`
+
+**Note**: The Docker setup includes:
+- Automatic database migrations on startup
+- Hot-reload for backend development
+- Health checks for all services
+- Persistent SQLite database volume
+- Proper networking between containers
 
 ## Verification
-- **Backend tests**: Run `pytest` in the `backend` directory.
+- **Backend tests**: Run `pytest` in the `backend` directory to execute the comprehensive test suite covering authentication, API endpoints, services, and security.
 - **Frontend build**: Run `npm run build` in the `frontend` directory.
 
 ## Trade-offs

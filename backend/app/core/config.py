@@ -29,7 +29,8 @@ class Settings(BaseSettings):
     # CORS Configuration
     BACKEND_CORS_ORIGINS: list[str] = [
         "http://localhost:5173", 
-        "http://localhost:3000"  
+        "http://localhost:3000",
+        "http://frontend"  # Docker service name
     ]
 
 # Global settings instance
