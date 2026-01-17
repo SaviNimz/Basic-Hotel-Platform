@@ -341,43 +341,4 @@ DATABASE_URL=sqlite:///./hotel.db
 VITE_API_URL=http://localhost:8000
 ```
 
----
-
-## Deployment Architecture
-
-### Development Setup
-
-```mermaid
-graph TB
-    subgraph "Development Environment"
-        FE[Frontend Dev Server<br/>Vite @ :5173]
-        BE[Backend Dev Server<br/>Uvicorn @ :8000]
-        DB[(SQLite File<br/>hotel.db)]
-    end
-    
-    FE -->|CORS-enabled requests| BE
-    BE --> DB
-    
-    style FE fill:#e1f5ff
-    style BE fill:#fff4e1
-    style DB fill:#e1ffe1
-```
-
-### Docker Compose Setup
-
-```mermaid
-graph TB
-    subgraph "Docker Environment"
-        FEC[Frontend Container<br/>:5173]
-        BEC[Backend Container<br/>:8000]
-        VOL[Volume: SQLite DB]
-    end
-    
-    FEC -->|Internal Network| BEC
-    BEC --> VOL
-    
-    style FEC fill:#e1f5ff
-    style BEC fill:#fff4e1
-    style VOL fill:#e1ffe1
-```
 
