@@ -67,6 +67,13 @@
     gap: var(--spacing-5);
 }
 
+.room-types-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-4);
+}
+
 .section-title {
     margin: 0;
     font-size: var(--text-2xl);
@@ -105,6 +112,10 @@
     gap: var(--spacing-2);
 }
 
+.room-type-card__rate--effective .room-type-card__rate-value {
+    color: var(--color-accent-500);
+}
+
 .room-type-card__rate-label {
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
@@ -117,6 +128,9 @@
 }
 
 .room-type-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-3);
     padding-top: var(--spacing-3);
     border-top: var(--border-width) solid var(--color-border);
 }
@@ -124,6 +138,12 @@
 /* ========== ADJUSTMENT FORM ========== */
 
 .adjustment-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.room-type-form {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-5);

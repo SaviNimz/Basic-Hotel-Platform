@@ -7,6 +7,12 @@ export interface HotelBase {
 
 export interface HotelCreate extends HotelBase {}
 
+export interface HotelUpdate {
+  name?: string;
+  location?: string;
+  is_active?: boolean;
+}
+
 export interface Hotel extends HotelBase {
   id: number;
 }
@@ -19,6 +25,12 @@ export interface RoomTypeBase {
 }
 
 export interface RoomTypeCreate extends RoomTypeBase {}
+
+export interface RoomTypeUpdate {
+  name?: string;
+  base_rate?: number;
+  hotel_id?: number;
+}
 
 export interface RoomType extends RoomTypeBase {
   id: number;
