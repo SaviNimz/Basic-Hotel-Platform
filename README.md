@@ -1,6 +1,6 @@
 # Basic Hotel Platform
 
-A minimal internal hotel admin tool demonstrating clean domain modeling, pragmatic backend fundamentals, and a polished UI.
+A minimal internal hotel admin tool demonstrating domain modeling, backend API endpoints, and a simple UI.
 
 ## Features
 - **Authentication**: JWT-based login with a seeded admin user.
