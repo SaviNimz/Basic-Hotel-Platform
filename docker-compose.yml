@@ -8,7 +8,48 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
+      - backend_db:/app
     environment:
-      - SECRET_KEY=changethis
-      # SQLite fallback if not using Postgres
-      - DATABASE_URL=sqlite:///./hotel.db
+      - SECRET_KEY=supersecretkey
+      - SQLALCHEMY_DATABASE_URL=sqlite:///./hotel.db
+      - BACKEND_CORS_ORIGINS=["http://localhost:5173", "http://localhost:3000", "http://frontend"]
+    networks:
+      - hotel-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    command: >
+      sh -c "
+      alembic upgrade head &&
+      python seed.py &&
+      uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+  frontend:
+    build: ./frontend
+    container_name: hotel_frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    networks:
+      - hotel-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  hotel-network:
+    driver: bridge
+
+volumes:
+  backend_db:
