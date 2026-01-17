@@ -13,7 +13,6 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     """
     User-specific CRUD operations.
     """
-    
     def get_by_username(self, db: Session, username: str) -> Optional[User]:
         """
         Retrieve a user by username.

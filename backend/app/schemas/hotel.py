@@ -4,6 +4,7 @@ Hotel-related Pydantic schemas for request/response validation.
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 
+
 class HotelBase(BaseModel):
     """
     Base hotel schema with common validation rules.
@@ -12,11 +13,13 @@ class HotelBase(BaseModel):
     location: str = Field(..., min_length=1, description="Location of the hotel")
     is_active: bool = True
 
+
 class HotelCreate(HotelBase):
     """
     Schema for creating a new hotel.
     """
     pass
+
 
 class HotelUpdate(BaseModel):
     """
@@ -26,6 +29,7 @@ class HotelUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, description="Name of the hotel")
     location: Optional[str] = Field(None, min_length=1, description="Location of the hotel")
     is_active: Optional[bool] = None
+
 
 class Hotel(HotelBase):
     """

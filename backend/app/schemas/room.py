@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from datetime import date
 from typing import Optional
 
+
 class RoomTypeBase(BaseModel):
     """
     Base room type schema with validation.
@@ -13,11 +14,13 @@ class RoomTypeBase(BaseModel):
     base_rate: float = Field(..., gt=0, description="Base nightly rate, must be positive")
     hotel_id: int = Field(..., description="ID of the hotel this room type belongs to")
 
+
 class RoomTypeCreate(RoomTypeBase):
     """
     Schema for creating a new room type.
     """
     pass
+
 
 class RoomTypeUpdate(BaseModel):
     """
@@ -27,6 +30,7 @@ class RoomTypeUpdate(BaseModel):
     base_rate: Optional[float] = Field(None, gt=0)
     hotel_id: Optional[int] = None
 
+
 class RoomType(RoomTypeBase):
     """
     Room type schema for API responses.
@@ -34,6 +38,7 @@ class RoomType(RoomTypeBase):
     model_config = ConfigDict(from_attributes=True)
     
     id: int
+
 
 class RateAdjustmentBase(BaseModel):
     """
@@ -44,11 +49,13 @@ class RateAdjustmentBase(BaseModel):
     effective_date: date = Field(..., description="Date when this adjustment takes effect")
     reason: str = Field(..., min_length=1, description="Business reason for the adjustment")
 
+
 class RateAdjustmentCreate(RateAdjustmentBase):
     """
     Schema for creating a new rate adjustment.
     """
     pass
+
 
 class RateAdjustmentUpdate(BaseModel):
     """
@@ -58,6 +65,7 @@ class RateAdjustmentUpdate(BaseModel):
     adjustment_amount: Optional[float] = None
     effective_date: Optional[date] = None
     reason: Optional[str] = Field(None, min_length=1)
+
 
 class RateAdjustment(RateAdjustmentBase):
     """

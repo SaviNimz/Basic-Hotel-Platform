@@ -20,6 +20,7 @@ engine = create_engine(
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 @pytest.fixture(scope="module")
 def test_db():
     Base.metadata.create_all(bind=engine)
@@ -34,6 +35,7 @@ def test_db():
     
     db.close()
     Base.metadata.drop_all(bind=engine)
+
 
 @pytest.fixture(scope="function")
 def db_session(test_db):
@@ -50,6 +52,7 @@ def db_session(test_db):
     transaction.rollback()
     connection.close()
 
+
 @pytest.fixture(scope="module")
 def client(test_db):
     def override_get_db():
@@ -63,11 +66,13 @@ def client(test_db):
     with TestClient(app) as c:
         yield c
 
+
 @pytest.fixture(scope="module")
 def admin_token(client):
     response = client.post("/auth/token", data={"username": "admin", "password": "password123"})
     assert response.status_code == 200
     return response.json()["access_token"]
+
 
 @pytest.fixture(scope="module")
 def admin_headers(admin_token):

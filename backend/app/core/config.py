@@ -32,6 +32,5 @@ class Settings(BaseSettings):
         "http://localhost:3000"  
     ]
 
-
 # Global settings instance
 settings = Settings()
